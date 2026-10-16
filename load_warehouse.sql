@@ -1,3 +1,5 @@
+DELETE FROM railway_warehouse.`Service Train Numbers`;
+
 DELETE FROM railway_warehouse.`Stops and Services`;
 
 DELETE FROM railway_warehouse.`Stop Arrivals`;
@@ -12,7 +14,6 @@ INSERT INTO railway_warehouse.`Services` (
     `Service:Date`,
     `Service:Type`,
     `Service:Company`,
-    `Service:Train number`,
     `Service:Completely cancelled`,
     `Service:Partly cancelled`,
     `Service:Maximum delay`
@@ -23,11 +24,6 @@ SELECT
     `Service:Date`,
     `Service:Type`,
     `Service:Company`,
-    GROUP_CONCAT(
-        DISTINCT `Service:Train number`
-        ORDER BY `Service:Train number`
-        SEPARATOR ', '
-    ),
     `Service:Completely cancelled`,
     `Service:Partly cancelled`,
     MAX(`Service:Maximum delay`)
@@ -93,3 +89,15 @@ SELECT DISTINCT
     `Service:RDT-ID`,
     `Stop:RDT-ID`
 FROM cleaned;
+
+
+INSERT INTO railway_warehouse.`Service Train Numbers` (
+    `Service:RDT-ID`,
+    `Service:Train number`
+)
+
+SELECT DISTINCT
+    `Service:RDT-ID`,
+    `Service:Train number`
+FROM cleaned
+WHERE `Service:Train number` IS NOT NULL;

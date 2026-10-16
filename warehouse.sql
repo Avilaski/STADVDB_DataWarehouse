@@ -6,7 +6,6 @@ CREATE TABLE IF NOT EXISTS `railway_warehouse`.`Services` (
     `Service:Date` DATE NOT NULL,
     `Service:Type` VARCHAR(255),
     `Service:Company` VARCHAR(255),
-    `Service:Train number` TEXT,
     `Service:Completely cancelled` BOOLEAN,
     `Service:Partly cancelled` BOOLEAN,
     `Service:Maximum delay` BIGINT,
@@ -58,6 +57,17 @@ CREATE TABLE IF NOT EXISTS `railway_warehouse`.`Stops and Services` (
 
     FOREIGN KEY (`Stop:RDT-ID`)
         REFERENCES `railway_warehouse`.`Stops` (`Stop:RDT-ID`),
+
+    FOREIGN KEY (`Service:RDT-ID`)
+        REFERENCES `railway_warehouse`.`Services` (`Service:RDT-ID`)
+);
+
+
+CREATE TABLE IF NOT EXISTS `railway_warehouse`.`Service Train Numbers` (
+    `Service:RDT-ID` BIGINT NOT NULL,
+    `Service:Train number` BIGINT NOT NULL,
+
+    PRIMARY KEY (`Service:RDT-ID`, `Service:Train number`),
 
     FOREIGN KEY (`Service:RDT-ID`)
         REFERENCES `railway_warehouse`.`Services` (`Service:RDT-ID`)

@@ -58,7 +58,7 @@ py railway_etl.py
 ```
 
 Enter your MySQL password again. The script reads the source database
-cleans the records, and loads the five warehouse tables. It prints the table
+cleans the records, and loads the six warehouse tables. It prints the table
 counts and a completion message when finished
 
 The pipeline is basically:
@@ -84,3 +84,24 @@ Import each file ONLY once.
 
 For another dataset file just repeat steps 5 and 6
 
+
+
+## FOLLOWING RECENT SCHEMA CHANGE: numbers
+
+Services now has one row per service and no train-number column.
+Service Train Numbers stores one row per distinct service ID and train number
+The other four tables are unchanged.
+Source imports and temporary cleaned rows are unchanged.
+
+For an existing warehouse, execute reset_warehouse.sql in Workbench, then
+warehouse.sql. The reset permanently deletes the six warehouse tables and their
+contents, though not touching railway_source 
+
+If you want to clear out the source database too, run:
+
+```sql
+TRUNCATE TABLE railway_source.services_raw;
+```
+
+Then run import_source.py for each CSV and railway_etl.py to load the warehouse
+If you keep the existing source instead, you can just rerun the ETL without needing to reimport

@@ -32,7 +32,6 @@ tables = {
         'Service:Date',
         'Service:Type',
         'Service:Company',
-        'Service:Train number',
         'Service:Completely cancelled',
         'Service:Partly cancelled',
         'Service:Maximum delay',
@@ -57,6 +56,10 @@ tables = {
     'Stops and Services': [
         'Service:RDT-ID',
         'Stop:RDT-ID',
+    ],
+    'Service Train Numbers': [
+        'Service:RDT-ID',
+        'Service:Train number',
     ],
 }
 
@@ -186,8 +189,6 @@ def load_data(reader, writer):
     if writer.fetchone() is not None:
         raise ValueError("A stop ID belongs to more than one service")
     
-    # Allow enough space when combining the train numbers of each service.
-    writer.execute("SET SESSION group_concat_max_len = 65535")
     run_sql(writer, "load_warehouse.sql")
 
     # Check that the number of distinct rows in each warehouse table matches the expected number of distinct rows in the cleaned table
@@ -195,18 +196,26 @@ def load_data(reader, writer):
         selected = []
 
         for name in names:
-            # These two columns are combined into one value per service.
-            if table == "Services":
-                if name in ("Service:Maximum delay", "Service:Train number"):
-                    continue
+            # Keep the highest maximum delay for each service
+            if table == "Services" and name == "Service:Maximum delay":
+                continue
 
             selected.append("`" + name + "`")
 
         selected = ", ".join(selected)
 
+        condition = ""
+
+        if table == "Service Train Numbers":
+            condition = "WHERE `Service:Train number` IS NOT NULL"
+
         writer.execute(f"""
             SELECT COUNT(*)
-            FROM (SELECT DISTINCT {selected} FROM cleaned) AS records
+            FROM (
+                SELECT DISTINCT {selected}
+                FROM cleaned
+                {condition}
+            ) AS records
         """)
         expected = writer.fetchone()[0]
 
