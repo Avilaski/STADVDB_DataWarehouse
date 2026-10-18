@@ -1,0 +1,5 @@
+Service:RDT-ID,Service:Date,Service:Type,Service:Company,Service:Train number,Service:Completely cancelled,Service:Partly cancelled,Service:Maximum delay,Stop:RDT-ID,Stop:Station code,Stop:Station name,Stop:Arrival time,Stop:Arrival delay,Stop:Arrival cancelled,Stop:Departure time,Stop:Departure delay,Stop:Departure cancelled
+900001,2024-01-01, Sprinter ,NS,6728,false,false,8,910001,TL, Tiel ,,,,2024-01-01T09:18:00+01:00,7,false
+900001,2024-01-01,Sprinter,NS,8828,false,false,0,910002,UT,Utrecht Centraal,2024-01-01T09:54:00+01:00,0,false,,,
+900001,2024-01-01, Sprinter ,NS,6728,false,false,8,910001,TL, Tiel ,,,,2024-01-01T09:18:00+01:00,7,false
+900002,2024-01-01,Intercity,NS,,true,false,0,910003,ASD,Amsterdam Centraal,2024-01-01T12:00:00+01:00,-1,true,,,
